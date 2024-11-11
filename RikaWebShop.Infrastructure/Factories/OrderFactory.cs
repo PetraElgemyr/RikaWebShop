@@ -24,8 +24,6 @@ public static class OrderFactory
 		return null!;
     }
 
- 
-
     public static Order Create(OrderEntity entity)
     {
         try
@@ -46,6 +44,26 @@ public static class OrderFactory
         return null!;
     }
 
+    public static OrderEntity Create(OrderUpdateRequest updateOrderRequest)
+    {
+        try
+        {
+            return new OrderEntity
+            {
+                OrderNumber = updateOrderRequest.OrderNumber,
+                FirstName = updateOrderRequest.FirstName,
+                LastName = updateOrderRequest.LastName,
+                Email = updateOrderRequest.Email,
+                PhoneNumber = updateOrderRequest.PhoneNumber,
+                DeliveryAddress = updateOrderRequest.DeliveryAddress,
+                TotalPrice = updateOrderRequest.TotalPrice,
+            };
+        }
+        catch {}
+        return null!;
+    }
+
+   
     public static IEnumerable<Order> Create(List<OrderEntity> entities)
     {
         var list = new List<Order>();

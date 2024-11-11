@@ -2,9 +2,12 @@
 
 namespace RikaWebShop.Infrastructure.Models;
 
-public class OrderRequest
+public class OrderUpdateRequest
 {
-    [Required(ErrorMessage ="You must enter a valid first name")]
+    [Required(ErrorMessage = "Order number is required!")]
+    public string OrderNumber { get; set; } = null!;
+
+    [Required(ErrorMessage = "You must enter a valid first name")]
     public string FirstName { get; set; } = null!;
 
     [Required(ErrorMessage = "You must enter a valid last name")]

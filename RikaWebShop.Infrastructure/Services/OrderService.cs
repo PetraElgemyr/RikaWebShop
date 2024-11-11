@@ -56,14 +56,11 @@ public class OrderService : IOrderService
 
     }
 
-    public ResponseResult<Order> GetOne(Func<Order, bool> predicate)
+    public ResponseResult<Order> GetOneByOrderNumber(string orderNumber)
     {
         try
         {
-            //Func<OrderEntity, bool> entityPredicate = entity => predicate(OrderFactory.Create(entity));
-
-            // TODO kolla upp fel
-            var result = _orderRepository.GetOne(predicate);
+            var result = _orderRepository.GetOne(x => x.OrderNumber == orderNumber);
             if (result.Success)
             {
                 var order = OrderFactory.Create(result.Data!);
@@ -74,39 +71,50 @@ public class OrderService : IOrderService
                 return ResponseFactory<Order>.NotFound(null!);
             }
         }
-        catch
+        catch { }
+        return ResponseFactory<Order>.Failed(null!);
+
+    }
+
+    public ResponseResult<Order> UpdateOneByOrderNumber(string orderNumber, OrderUpdateRequest updateRequest)
+    {
+
+        try
         {
+            var entity = OrderFactory.Create(updateRequest);
+            var result = _orderRepository.UpdateOne(x => x.OrderNumber == orderNumber, entity);
+            var order = OrderFactory.Create(result.Data!);
+
+            if (result.Success)
+            {
+                return ResponseFactory<Order>.Success(order);
+            }
+            return ResponseFactory<Order>.Failed(order);
+
+        }
+        catch
+        { }
+        return ResponseFactory<Order>.Failed(null!);
+
+    }
+
+
+    public ResponseResult<Order> DeleteOneByOrderNumber(string orderNumber)
+    {
+        try
+        {
+            var result = _orderRepository.DeleteOne(x => x.OrderNumber == orderNumber);
+
+            if (result.Success)
+            {
+                var order = OrderFactory.Create(result.Data!);
+                return ResponseFactory<Order>.Success(order);
+            }
+
             return ResponseFactory<Order>.Failed(null!);
         }
-    }
-
-    public ResponseResult<Order> UpdateOne(Func<Order, bool> predicate, Order updatedOrder)
-    {
-        // TODO kolla upp fel
-
-        var result = _orderRepository.UpdateOne(predicate, updatedOrder);
-
-        if (result.Success)
-        {
-            return ResponseFactory<Order>.Success(result.Data!);
-        }
-
-        return ResponseFactory<Order>.Failed(result.Data!);
-    }
-
-
-    public ResponseResult DeleteOne(Func<Order, bool> predicate)
-    {
-        // TODO kolla upp fel
-
-        var result = _orderRepository.DeleteOne(predicate);
-
-        if (result.Success)
-        {
-            return ResponseFactory<Order>.Success(result.Data!);
-        }
-
-        return ResponseFactory<Order>.Failed(result.Data!);
+        catch { }
+        return ResponseFactory<Order>.Failed(null!);
     }
 
 }

@@ -37,6 +37,8 @@ public class ResponseFactory<T> : BaseResponseFactory
         };
     }
 
+   
+
     public static ResponseResult<T> AlreadyExists(T data, int statusCode = 409, string? message = null!)
     {
         return new ResponseResult<T>
@@ -48,3 +50,4 @@ public class ResponseFactory<T> : BaseResponseFactory
         };
     }
 }
+
